@@ -5,20 +5,9 @@ class DataTable extends Component {
         super(props);
 
         this.state = {
-            selectedItems: [],
             editIndex: -1,
             dataEdit: ''
         }
-    }
-
-    handleChangeSelectItem = index => {
-        const { selectedItems } = this.state;
-        const indexSelectedItem = selectedItems.findIndex(selectedItem => selectedItem === index);
-        if (indexSelectedItem > -1)
-            selectedItems.splice(indexSelectedItem, 1);
-        else
-            selectedItems.push(index);
-        this.setState({ selectedItems });
     }
 
     handleClickEditTodo = (value, index) => {
@@ -43,11 +32,11 @@ class DataTable extends Component {
 
     render () {
         // Data
-        const { items, field, fieldKey } = this.props;
-        const { selectedItems, editIndex, dataEdit } = this.state;
+        const { items, field, fieldKey, fieldSelect } = this.props;
+        const { editIndex, dataEdit } = this.state;
 
         // Function
-        const { onRemoveItem } = this.props;
+        const { onChangeSelectItem, onRemoveItem } = this.props;
 
         return items.length > 0 && (
             <table className="table mt-3">
@@ -55,10 +44,10 @@ class DataTable extends Component {
                     { items.map((item, index) => {
                         return (
                             <tr key={item[fieldKey]}>
-                                <td className="align-middle" style={{ width: '5%' }}><input className="" type="checkbox" checked={item.selected} onChange={() => this.handleChangeSelectItem(index)} /></td>
+                                <td className="align-middle" style={{ width: '5%' }}><input className="" type="checkbox" checked={!!item.selected} onChange={() => onChangeSelectItem(index)} /></td>
                                 <td className="align-middle text-left">
                                     { editIndex !== index
-                                        ? ( selectedItems.includes(index)
+                                        ? ( item[fieldSelect]
                                                 ? <p className="font-weight-bold mb-0 text-muted"><s>{item[field]}</s></p>
                                                 : <p className="font-weight-bold mb-0">{item[field]}</p>
                                             )
@@ -70,7 +59,7 @@ class DataTable extends Component {
                                         ? <button className="btn btn-transparent btn-sm" onClick={() => this.handleClickEditTodo(item[field], index)}><span className="material-icons">create</span></button>
                                         : <button className="btn btn-transparent btn-sm" onClick={this.handleClickCancelEditTodo}><span className="material-icons">cancel</span></button>
                                     }
-                                    <button className="btn btn-transparent btn-sm" onClick={onRemoveItem ? () => onRemoveItem(item[fieldKey]) : null}><span className="material-icons">delete</span></button>
+                                    <button className="btn btn-transparent btn-sm" onClick={() => onRemoveItem(item[fieldKey])}><span className="material-icons">delete</span></button>
                                 </td>
                             </tr>
                         );

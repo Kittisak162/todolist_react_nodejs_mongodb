@@ -32,6 +32,15 @@ class App extends Component {
     this.setState({ taskName: '', todos });
   }
 
+  handleChangeSelectTodo = index => {
+    const { todos } = this.state;
+    if (todos[index].selected)
+      todos[index].selected = !todos[index].selected;
+    else
+      todos[index].selected = true;
+    this.setState({ todos });
+  }
+
   handleChangeTodo = async (key, taskName) => {
     const { todos } = this.state;
     const index = todos.findIndex(todo => todo._id === key);
@@ -65,6 +74,8 @@ class App extends Component {
             items={todos}
             field="taskName"
             fieldKey="_id"
+            fieldSelect="selected"
+            onChangeSelectItem={this.handleChangeSelectTodo}
             onChangeItem={this.handleChangeTodo}
             onRemoveItem={this.handleClickRemoveTodo}
           />
