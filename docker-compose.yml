@@ -1,0 +1,30 @@
+version: "3"
+services:
+  frontend:
+    container_name: react_todolist
+    build: ./Frontend
+    ports:
+      - "3000:3000"
+    stdin_open: true
+  backend:
+    container_name: nodejs_todolist
+    build: ./Backend
+    ports:
+      - "8000:8000"
+    links:
+      - mongo
+    environment:
+      - PORT=8000
+      - BASE_API=/api/v1
+      - MONGO_URL=mongodb://mongo:27017/work
+  mongo:
+    container_name: mongodb
+    image: mongo
+    ports:
+      - "27017:27017"
+  mongo_express:
+    container_name: mongo-ui
+    image: mongo-express
+    ports:
+      - "8081:8081"
+
