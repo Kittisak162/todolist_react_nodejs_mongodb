@@ -58,7 +58,10 @@ class DataTable extends Component {
                                 <td className="align-middle" style={{ width: '5%' }}><input className="" type="checkbox" checked={item.selected} onChange={() => this.handleChangeSelectItem(index)} /></td>
                                 <td className="align-middle text-left">
                                     { editIndex !== index
-                                        ? <p className="font-weight-bold mb-0">{selectedItems.includes(index) ? <s>{item[field]}</s> : item[field]}</p>
+                                        ? ( selectedItems.includes(index)
+                                                ? <p className="font-weight-bold mb-0 text-muted"><s>{item[field]}</s></p>
+                                                : <p className="font-weight-bold mb-0">{item[field]}</p>
+                                            )
                                         : <input className="form-control form-control-sm" type="text" placeholder="Input task name then tap Enter to edit" value={dataEdit} onChange={this.handleChangeDataEdit} onKeyPress={e => this.handleKeyPressDataEdit(e, item[fieldKey])} />
                                     }
                                 </td>
